@@ -66,16 +66,20 @@ func FErrorN(err error, n int) error {
 	return fError(err, n)
 }
 
-// Log prints a description when a function response is not ok
-func Log(ok bool, desc string, n int) {
-	Logn(ok, desc, 1)
+func logn(ok bool, desc string, n int) {
+	if !ok {
+		print(n+3, "\t", desc)
+	}
 }
 
-// Logn prints a description when a function response is not ok skipped by n
+// Log prints a description when a function response is not ok
+func Log(ok bool, desc string, n int) {
+	logn(ok, desc, 1)
+}
+
+// Logn prints a description when a function response is not ok, skipped by n
 func Logn(ok bool, desc string, n int) {
-	if !ok {
-		print(n+2, "\t", desc)
-	}
+	logn(ok, desc, n)
 }
 
 // Printf prints information inline
