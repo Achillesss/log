@@ -11,13 +11,13 @@ import (
 )
 
 // FuncNameN returns name of function skipped by n
-func FuncNameN(n uint) string {
-	return funcName(int(n)+2, ".")
+func FuncNameN(n int) string {
+	return funcName(n+2, ".")
 }
 
 // PkgFuncNameN returns name of function with package name by n
-func PkgFuncNameN(n uint) string {
-	return funcName(int(n)+2, "/")
+func PkgFuncNameN(n int) string {
+	return funcName(n+2, "/")
 }
 
 // FuncName returns name of the function which calls it
@@ -37,7 +37,7 @@ func funcName(n int, smb string) string {
 	return strs[len(strs)-1]
 }
 
-func print(skip int, format string, arg ...interface{}) {
+func print(skip int, end string, format string, arg ...interface{}) {
 	if _, file, line, ok := runtime.Caller(skip); ok {
 		fileName := strings.Split(file, "/")
 		fmt.Printf("[%v:%v", fileName[len(fileName)-1], line)
@@ -45,26 +45,45 @@ func print(skip int, format string, arg ...interface{}) {
 			fmt.Printf(" ")
 			fmt.Printf(format, arg...)
 		}
-		fmt.Printf("]\t")
+		fmt.Printf("]%s", end)
 	}
 }
 
-// FError formats an error with name of the function which calls it
-func FError(err error) error {
+func fError(err error, n int) error {
 	if err != nil {
-		return fmt.Errorf("%s failed. Error: %v", funcName(2, "/"), err)
+		return fmt.Errorf("%s failed. Error: %v", funcName(3+n, "/"), err)
 	}
 	return nil
 }
 
+// FError formats an error with name of the function which calls it
+func FError(err error) error {
+	return fError(err, 0)
+}
+
+// FErrorN formats an error with name of the function which calls it skipped by n
+func FErrorN(err error, n int) error {
+	return fError(err, n)
+}
+
 // Log prints a description when a function response is not ok
-func Log(ok bool, desc string) {
+func Log(ok bool, desc string, n int) {
+	Logn(ok, desc, 1)
+}
+
+// Logn prints a description when a function response is not ok skipped by n
+func Logn(ok bool, desc string, n int) {
 	if !ok {
-		print(2, desc)
+		print(n+2, "\t", desc)
 	}
 }
 
 // Printf prints information inline
 func Printf(format string, arg ...interface{}) {
-	print(2, format, arg...)
+	print(2, "\t", format, arg...)
+}
+
+// Printfln prints information and create new line
+func Printfln(format string, arg ...interface{}) {
+	print(2, "\n", format, arg...)
 }
