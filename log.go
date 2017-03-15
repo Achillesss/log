@@ -73,7 +73,7 @@ func logn(ok bool, desc string, n int) {
 }
 
 // Log prints a description when a function response is not ok
-func Log(ok bool, desc string, n int) {
+func Log(ok bool, desc string) {
 	logn(ok, desc, 1)
 }
 
