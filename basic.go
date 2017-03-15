@@ -14,6 +14,7 @@ func in(value interface{}, src ...interface{}) (ok bool) {
 	}
 	return
 }
+
 func newLogAgent() *logAgent {
 	return &logAgent{symble: slash, end: inline, printType: logInformation}
 }

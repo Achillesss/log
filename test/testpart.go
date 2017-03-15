@@ -1,8 +1,9 @@
 package logtest
 
+// test files not finished yet _ _||
+
 import (
 	"fmt"
-
 	"time"
 
 	"github.com/achillesss/log"
