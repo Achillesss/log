@@ -72,12 +72,16 @@ func FmtErrNP(skip int, err *error) {
 
 // L logs a description when a function response is not ok
 func L(ok bool, desc string) {
-	print(1, logLog, "", desc)
+	if !ok {
+		print(1, logLog, "", desc)
+	}
 }
 
 // Ln differs from L in that it create a newline after loging
 func Ln(ok bool, desc string, skip int) {
-	print(1, logLog, newline, desc)
+	if !ok {
+		print(1, logLog, newline, desc)
+	}
 }
 
 // Infof prints information inline
