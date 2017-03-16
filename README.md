@@ -17,7 +17,7 @@ Use **-err false** to turn off _log.Error*()_ prints
 
 ##### Use **-time** to print message with a _time.Now().UTC().Format(time.RFC3339)_ tag.
 
-_log.Error*()_ and _log.Error*()_ prints are on by default.
+_log.L*()_ and _log.Error*()_ prints are on by default.
 
 ---
 ## Print in info, warning and error styles:
