@@ -16,20 +16,20 @@ So I try to develop a tool to log messages in a way I want.
 
 - Use **-err false** to turn off _log.Error*()_ prints
 
-## In developing:
+### In developing:
 
 - Use **-time** to print message with a _time.Now().UTC().Format(time.RFC3339)_ tag.
 
-## Attention
+### Attention
 
 - _log.L*()_ and _log.Error*()_ prints are on by default.
 
 ---
 ## Print in info, warning and error styles:
 
-- Use _Infof()_, _Warningf()_, _Errorf()_ to print informations **INLINE**, and use them just like you use _fmt.Printf()_.
+### Use _Infof()_, _Warningf()_, _Errorf()_ to print informations **INLINE**, and use them just like you use _fmt.Printf()_.
 
-## Example[1]:
+#### Example[1]:
 
         1  package main
         2  import "github.com/achillesss/log"
@@ -44,32 +44,31 @@ So I try to develop a tool to log messages in a way I want.
         11     print()
         12 }
 
-and you type 'go run main.go -info, -warn' in cmd-line. Then you'll get
+and you type 'go run main.go -info, -warn' in cmd-line. Then you'll get logs inline as below:
 
         [I_main.go_5] My name is Alex.    [W_main.go_6] Tell me how to spell "golang", please.    [E_main.go_7] g-o-l-a-n.
 
-all messages above inline.
 
-### But why do this?
+#### But why do this?
 
-Just try tail -f *.log | grep xxx | grep xxx
+Just try tail -f _**your_log_name**.log_ | grep xxx in your cmd-line.
 
-## Use _Infofln(), _Warningfln()_, _Errorfln()_ to print informations like _fmt.Printf(format+"\n",args...)_
+### Use _Infofln(), _Warningfln()_, _Errorfln()_ to print informations like _fmt.Printf(format+"\n", args...)_
 
-Replace each _log.Infof_, _log.Warningf_, _log.Errorf_ by _log.Infofln_, _log.Warninfln_, _log.Errorfln_, and you'll get
+Replace each _log.Infof_, _log.Warningf_, _log.Errorf_ by _log.Infofln_, _log.Warninfln_, _log.Errorfln_, and you'll get logs as below:
 
         [I_main.go_5] My name is Alex.
         [W_main.go_6] Tell me how to spell "golang", please.
         [E_main.go_7] g-o-l-a-n.
 
-### But why do this?
+#### But why do this?
 
 Want you to debug with all messages **inline**? I don't know and I don't want.
 
 ---
 ## Log:
 
-Time flies. I'll add this field later.    
+Time flies. I'll add this field later.
 
 ---
 ## Error Formating:
