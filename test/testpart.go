@@ -64,7 +64,7 @@ func errorfln() {
 }
 func l() {
 	log.L(true, "desc")
-	log.Ln(true, "desc", 1)
+	log.Lln(true, "%s Failed. Error: %v. Resp: %#v", log.FuncName(), "ERROR", "RESP")
 }
 func fmtErr() {
 	err1 := fmt.Errorf("error1")

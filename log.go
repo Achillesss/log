@@ -11,6 +11,7 @@ var (
 	infoOn = flag.Bool("info", false, "whether print 'info', default off")
 	warnOn = flag.Bool("warn", false, "whether print 'warning', default off")
 	errOn  = flag.Bool("err", true, "whether print 'error', default on")
+	timeOn = flag.Bool("time", false, "whether print with a time.Now().UTC().Format(time.RFC3339)[:19] tag")
 )
 
 // Parse parses flags
@@ -22,8 +23,10 @@ func formatErr(skip int, pkgName bool, err *error) {
 	newLogAgent().setSkip(skip + 1).setSymble(pkgName).formatErr(err)
 }
 
-func print(skip int, printType, end string, format string, arg ...interface{}) {
-	newLogAgent().setSkip(skip+1).setPrintType(printType).setEnd(end).print(format, arg...)
+func print(ok bool, skip int, printType, end string, format string, arg ...interface{}) {
+	if ok {
+		newLogAgent().setSkip(skip+1).setPrintType(printType).setEnd(end).print(format, arg...)
+	}
 }
 
 func funcName(skip int, on bool) string {
@@ -71,57 +74,41 @@ func FmtErrNP(skip int, err *error) {
 }
 
 // L logs a description when a function response is not ok
-func L(ok bool, desc string) {
-	if !ok {
-		print(1, logLog, "", desc)
-	}
+func L(ok bool, format string, arg ...interface{}) {
+	print(ok, 1, logLog, "", format, arg...)
 }
 
-// Ln differs from L in that it create a newline after loging
-func Ln(ok bool, desc string, skip int) {
-	if !ok {
-		print(1, logLog, newline, desc)
-	}
+// Lln differs from L in that it create a newline after loging
+func Lln(ok bool, format string, arg ...interface{}) {
+	print(ok, 1, logLog, newline, format, arg...)
 }
 
 // Infof prints information inline
 func Infof(format string, arg ...interface{}) {
-	if *infoOn {
-		print(1, "", "", format, arg...)
-	}
+	print(*infoOn, 1, "", "", format, arg...)
 }
 
 // Infofln prints information and create new line
 func Infofln(format string, arg ...interface{}) {
-	if *infoOn {
-		print(1, "", newline, format, arg...)
-	}
+	print(*infoOn, 1, "", newline, format, arg...)
 }
 
 // Warningf prints information inline
 func Warningf(format string, arg ...interface{}) {
-	if *warnOn {
-		print(1, logWarning, "", format, arg...)
-	}
+	print(*warnOn, 1, logWarning, "", format, arg...)
 }
 
 // Warningfln prints information and create new line
 func Warningfln(format string, arg ...interface{}) {
-	if *warnOn {
-		print(1, logWarning, newline, format, arg...)
-	}
+	print(*warnOn, 1, logWarning, newline, format, arg...)
 }
 
 // Errorf prints information inline
 func Errorf(format string, arg ...interface{}) {
-	if *errOn {
-		print(1, logError, "", format, arg...)
-	}
+	print(*errOn, 1, logError, "", format, arg...)
 }
 
 // Errorfln prints information and create new line
 func Errorfln(format string, arg ...interface{}) {
-	if *errOn {
-		print(1, logError, newline, format, arg...)
-	}
+	print(*errOn, 1, logError, newline, format, arg...)
 }

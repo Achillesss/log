@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime"
 	"strings"
+	"time"
 )
 
 func in(value interface{}, src ...interface{}) (ok bool) {
@@ -61,20 +62,19 @@ func (a *logAgent) funcName() string {
 func (a *logAgent) print(format string, arg ...interface{}) {
 	if _, file, line, ok := runtime.Caller(a.skip + 1); ok {
 		fileName := strings.Split(file, slash)
-		arg = append([]interface{}{a.printType, fileName[len(fileName)-1], line}, arg...)
+		timeTag := ""
+		if *timeOn {
+			timeTag = " " + time.Now().UTC().Format(time.RFC3339)[:19]
+		}
+		arg = append([]interface{}{a.printType, fileName[len(fileName)-1], line, timeTag}, arg...)
 		arg = append(arg, a.end)
-		fmt.Printf("[%s_%v_%v] "+format+"%v", arg...)
+		format = "[%s_%v_%v%s] " + format + "%v"
+		fmt.Printf(format, arg...)
 	}
 }
 
 func (a *logAgent) formatErr(err *error) {
 	if err != nil && *err != nil {
 		*err = fmt.Errorf("%s fail. Desc: %v", a.funcName(), *err)
-	}
-}
-
-func (a *logAgent) log(ok bool, desc string) {
-	if !ok {
-		a.setSkip(a.skip + 1).print(desc)
 	}
 }
