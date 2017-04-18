@@ -33,8 +33,8 @@ So I try to develop a tool to log messages in a way I want.
         2  import "github.com/achillesss/log"
         3  func print(){
         4    log.Parse()
-        5    log.Infof("My name is %s.", Alex) // simply an information
-        6    log.Warningf("Tell me how to spell %q, please.", golang) // pretend to be warned
+        5    log.Infof("My name is %s.", "Alex") // simply an information
+        6    log.Warningf("Tell me how to spell %q, please.", "golang") // pretend to be warned
         7    log.Errorf("g-o-l-a-n.") // that's exactly an error
         8  }
         9  func main() {
@@ -84,8 +84,7 @@ if you turn on it, your all logs will turn into the form as below:
         8  func getResponse() (res *response, err error) {
         9      log.Infof("start to get response.")
         10     // get response
-        11     log.L(err != nil, "%s failed. Error: %v. Resp: %s",err, res.String*())
-        12     log.Infof("finish get response.")
+        11     log.L(err != nil, "%s failed. Error: %v. Resp: %s",log.FuncName(), err, res.String*())
         13 }
         14 func main() {
         15     log.Parse()
