@@ -38,7 +38,7 @@ func FuncName() string {
 	return funcName(1, false)
 }
 
-// FuncNameP returns name of the function which calls if with package name
+// FuncNameP returns name of the function which calls it with package name
 func FuncNameP() string {
 	return funcName(1, true)
 }
