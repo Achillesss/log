@@ -37,7 +37,7 @@ func funcNameN() {
 	infof()
 	infofln()
 	l()
-	// go fmtErr()
+	go fmtErr()
 
 	time.Sleep(time.Millisecond * 50)
 }
@@ -71,8 +71,8 @@ func fmtErr() {
 	err2 := fmt.Errorf("error2")
 	log.Infofln("ERR: %v", err1)
 	log.Infofln("ERR: %v", err2)
-	log.FmtErr(&err1)
-	log.FmtErrP(&err2)
-	log.Infofln("ERR: %v", err1)
-	log.Infofln("ERR: %v", err2)
+	e1 := log.FmtErr(&err1)
+	e2 := log.FmtErrP(&err2)
+	log.Infofln("ERR: %v\t%v", err1, e1)
+	log.Infofln("ERR: %v\t%v", err2, e2)
 }
