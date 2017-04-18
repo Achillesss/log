@@ -19,8 +19,8 @@ func Parse() {
 	flag.Parse()
 }
 
-func formatErr(skip int, pkgName bool, err *error) {
-	newLogAgent().setSkip(skip + 1).setSymble(pkgName).formatErr(err)
+func formatErr(skip int, pkgName bool, err *error) error {
+	return newLogAgent().setSkip(skip + 1).setSymble(pkgName).formatErr(err)
 }
 
 func print(ok bool, skip int, printType, end string, format string, arg ...interface{}) {
@@ -54,23 +54,23 @@ func FuncNameNP(skip int) string {
 }
 
 // FmtErr formats an error with name of the function which calls it
-func FmtErr(err *error) {
-	formatErr(1, false, err)
+func FmtErr(err *error) error {
+	return formatErr(1, false, err)
 }
 
 // FmtErrP differs from FmtErr in that it formats an error WITH PACKAGE NAME IN ADDITION
-func FmtErrP(err *error) {
-	formatErr(1, true, err)
+func FmtErrP(err *error) error {
+	return formatErr(1, true, err)
 }
 
 // FmtErrN formats an error with name of the function which calls it skipped by skip
-func FmtErrN(skip int, err *error) {
-	formatErr(skip+1, false, err)
+func FmtErrN(skip int, err *error) error {
+	return formatErr(skip+1, false, err)
 }
 
 // FmtErrNP differs from FmtErrN in that it formats an error WITH PACKAGE NAME IN ADDITION
-func FmtErrNP(skip int, err *error) {
-	formatErr(skip+1, true, err)
+func FmtErrNP(skip int, err *error) error {
+	return formatErr(skip+1, true, err)
 }
 
 // L logs a description when a function response is not ok

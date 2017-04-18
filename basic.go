@@ -73,8 +73,10 @@ func (a *logAgent) print(format string, arg ...interface{}) {
 	}
 }
 
-func (a *logAgent) formatErr(err *error) {
+func (a *logAgent) formatErr(err *error) error {
 	if err != nil && *err != nil {
 		*err = fmt.Errorf("%s fail. Desc: %v", a.funcName(), *err)
+		return *err
 	}
+	return nil
 }
