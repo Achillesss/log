@@ -19,6 +19,8 @@ func Parse() {
 	flag.Parse()
 }
 
+type formatErrCover func(skip int, pkgName bool, err *error) error
+
 func formatErr(skip int, pkgName bool, err *error) error {
 	return newLogAgent().setSkip(skip + 1).setSymble(pkgName).formatErr(err)
 }
@@ -53,24 +55,31 @@ func FuncNameNP(skip int) string {
 	return funcName(skip+1, true)
 }
 
+func formatErrEntrance(skip int, pkgName bool, err *error) error {
+	if err != nil && *err != nil {
+		return formatErr(skip+1, pkgName, err)
+	}
+	return nil
+}
+
 // FmtErr formats an error with name of the function which calls it
 func FmtErr(err *error) error {
-	return formatErr(1, false, err)
+	return formatErrEntrance(1, false, err)
 }
 
 // FmtErrP differs from FmtErr in that it formats an error WITH PACKAGE NAME IN ADDITION
 func FmtErrP(err *error) error {
-	return formatErr(1, true, err)
+	return formatErrEntrance(1, true, err)
 }
 
 // FmtErrN formats an error with name of the function which calls it skipped by skip
 func FmtErrN(skip int, err *error) error {
-	return formatErr(skip+1, false, err)
+	return formatErrEntrance(skip+1, false, err)
 }
 
 // FmtErrNP differs from FmtErrN in that it formats an error WITH PACKAGE NAME IN ADDITION
 func FmtErrNP(skip int, err *error) error {
-	return formatErr(skip+1, true, err)
+	return formatErrEntrance(skip+1, true, err)
 }
 
 // L logs a description when a function response is not ok
