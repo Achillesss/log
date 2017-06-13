@@ -57,7 +57,7 @@ func FuncNameNP(skip int) string {
 
 func formatErrEntrance(skip int, pkgName bool, err *error) error {
 	if err != nil && *err != nil {
-		return formatErr(skip+1, pkgName, err)
+		return formatErr(skip+2, pkgName, err)
 	}
 	return nil
 }
