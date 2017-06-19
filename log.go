@@ -102,6 +102,11 @@ func Infofln(format string, arg ...interface{}) {
 	print(*infoOn, 1, "", newline, format, arg...)
 }
 
+// InfoflnN prints information and create new line with a skip
+func InfoflnN(skip int, format string, arg ...interface{}) {
+	print(*infoOn, 1+skip, "", newline, format, arg...)
+}
+
 // Warningf prints information inline
 func Warningf(format string, arg ...interface{}) {
 	print(*warnOn, 1, logWarning, "", format, arg...)
