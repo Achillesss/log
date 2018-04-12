@@ -5,6 +5,8 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	but "github.com/achillesss/but4print"
 )
 
 func in(value interface{}, src ...interface{}) (ok bool) {
@@ -63,13 +65,59 @@ func (a *logAgent) print(format string, arg ...interface{}) {
 	if _, file, line, ok := runtime.Caller(a.skip + 1); ok {
 		fileName := strings.Split(file, slash)
 		timeTag := ""
+
 		if *timeOn {
 			timeTag = " " + time.Now().UTC().Format(time.RFC3339)[:19]
 		}
+
 		arg = append([]interface{}{a.printType, fileName[len(fileName)-1], line, timeTag}, arg...)
-		arg = append(arg, a.end)
-		format = "[%s_%v_%v%s] " + format + "%v"
-		fmt.Printf(format, arg...)
+		format = "[%s_%v_%v%s] " + format + a.end
+		printer := but.NewButer(nil, format, arg...)
+
+		var (
+			setBold   bool
+			foreColor but.ColorName = -1
+			backColor but.ColorName = -1
+		)
+
+		switch a.printType {
+		case logWarning:
+			foreColor = but.COLOR_WHITE
+			backColor = but.COLOR_YELLOW
+			if warnForeColor != nil {
+				foreColor = *warnForeColor
+			}
+			if warnBackColor != nil {
+				backColor = *warnBackColor
+			}
+			setBold = true
+
+		case logError:
+			foreColor = but.COLOR_WHITE
+			backColor = but.COLOR_RED
+			if errorForeColor != nil {
+				foreColor = *errorForeColor
+			}
+			if errorBackColor != nil {
+				backColor = *errorBackColor
+			}
+			setBold = true
+		case logInformation:
+			if infoForeColor != nil {
+				foreColor = *infoForeColor
+			}
+			if infoBackColor != nil {
+				backColor = *infoBackColor
+			}
+		}
+
+		printer.Color(foreColor, false).Color(backColor, true)
+
+		if setBold {
+			printer.Show(but.SET_BOLD)
+		}
+
+		printer.Print()
 	}
 }
 

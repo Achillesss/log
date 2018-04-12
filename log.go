@@ -5,6 +5,8 @@ package log
 
 import (
 	"flag"
+
+	but "github.com/achillesss/but4print"
 )
 
 var (
@@ -12,11 +14,41 @@ var (
 	warnOn = flag.Bool("warn", false, "whether print 'warning', default off")
 	errOn  = flag.Bool("err", true, "whether print 'error', default on")
 	timeOn = flag.Bool("time", false, "whether print with a time.Now().UTC().Format(time.RFC3339)[:19] tag")
+
+	infoForeColor *but.ColorName
+	infoBackColor *but.ColorName
+
+	warnForeColor *but.ColorName
+	warnBackColor *but.ColorName
+
+	errorForeColor *but.ColorName
+	errorBackColor *but.ColorName
 )
 
 // Parse parses flags
-func Parse() {
-	flag.Parse()
+
+func SetInfoColor(c but.ColorName, isBackgroundColor bool) {
+	if isBackgroundColor {
+		infoBackColor = &c
+		return
+	}
+	infoForeColor = &c
+}
+
+func SetWarnColor(c but.ColorName, isBackgroundColor bool) {
+	if isBackgroundColor {
+		warnBackColor = &c
+		return
+	}
+	warnForeColor = &c
+}
+
+func SetErrorColor(c but.ColorName, isBackgroundColor bool) {
+	if isBackgroundColor {
+		errorBackColor = &c
+		return
+	}
+	errorForeColor = &c
 }
 
 type formatErrCover func(skip int, pkgName bool, err *error) error
@@ -109,20 +141,20 @@ func InfoflnN(skip int, format string, arg ...interface{}) {
 
 // Warningf prints information inline
 func Warningf(format string, arg ...interface{}) {
-	print(*warnOn, 1, logWarning, "", format, arg...)
+	print(*warnOn || *infoOn, 1, logWarning, "", format, arg...)
 }
 
 // Warningfln prints information and create new line
 func Warningfln(format string, arg ...interface{}) {
-	print(*warnOn, 1, logWarning, newline, format, arg...)
+	print(*warnOn || *infoOn, 1, logWarning, newline, format, arg...)
 }
 
 // Errorf prints information inline
 func Errorf(format string, arg ...interface{}) {
-	print(*errOn, 1, logError, "", format, arg...)
+	print(*errOn || *warnOn || *infoOn, 1, logError, "", format, arg...)
 }
 
 // Errorfln prints information and create new line
 func Errorfln(format string, arg ...interface{}) {
-	print(*errOn, 1, logError, newline, format, arg...)
+	print(*errOn || *warnOn || *infoOn, 1, logError, newline, format, arg...)
 }
